@@ -18,12 +18,12 @@ const quizQuestions = [
   {
     title: "Commonly used data types DO NOT include:",
     choices: ["strings", "booleans", "alerts", "numbers"],
-    answer: 2
+    answer: "alerts"
   },
   {
     title: "The condition in an if / else statement is enclosed within ____.",
     choices: ["quotes", "curly brackets", "parentheses", "square brackets"],
-    answer: 2
+    answer: "parentheses"
   },
   {
     title: "Arrays in JavaScript can be used to store ____.",
@@ -33,19 +33,19 @@ const quizQuestions = [
       "booleans",
       "all of the above"
     ],
-    answer: 3
+    answer: "all of the above"
   },
   {
     title:
       "String values must be enclosed within ____ when being assigned to variables.",
     choices: ["commas", "curly brackets", "quotes", "parentheses"],
-    answer: 2
+    answer: "quotes"
   },
   {
     title:
       "A very useful tool used during development and debugging for printing content to the debugger is:",
     choices: ["JavaScript", "terminal / bash", "for loops", "console.log"],
-    answer: 3
+    answer: "console.log"
   }
 ];
 
@@ -71,13 +71,20 @@ function showQuestion(){
     questionTitle.textContent = currentQuestion.title;
     
     for(i = 0; i < currentQuestion.choices.length; i++) {
-      var listItem = document.getElementById(i);
-      listItem.textContent = currentQuestion.choices[i];
+      var radioBox = document.getElementById(i);
+      var radioBoxLabel = document.querySelector(`label[for="${i}"]`)
+      console.log(radioBoxLabel)
+      radioBox.value = currentQuestion.choices[i];
+      radioBoxLabel.textContent = currentQuestion.choices[i];
     } }
   
 function nextQuestion(event) {
   event.preventDefault();
+  checkAnswer();
   questionIndex++
+  if (questionIndex === quizQuestions.length){
+    return endQuiz();
+  }
   showQuestion() 
 }
 
@@ -87,17 +94,36 @@ function saveScore() {
 }
 function endQuiz() {
     clearInterval(timerInterval);
-  }
-// function checkAnswer(){
-//   if (userChoice === quizQuestions[questionIndex].answer) {
-//     alert("Correct");
-//   } else if(userChoice2 === quizQuestions[questionIndex].answer){
-    
-//     secondsLeft -= 3;
-//     alert("Try Again!");
-//   }
-// }
+    var currentScores = JSON.parse(localStorage.getItem("scores")) || []
+    var userName = prompt("Please enter your name");
+    var userData = {
+      userName: userName, userScore: secondsLeft
+    }
+    currentScores.push(userData)
+    localStorage.setItem("scores", JSON.stringify(currentScores))
 
+    
+    alert("You Scored " + secondsLeft)
+    // if(!currentScores) {currentScores =[]}
+  }
+
+
+  function checkAnswer(){
+  var radioBoxes = document.querySelectorAll("input[type=radio]")
+  var correctAnswer = quizQuestions[questionIndex].answer
+  for(var i = 0; i< radioBoxes.length; i++) {
+    var currentButton = radioBoxes[i];
+    if (currentButton.checked) {
+     if (currentButton.value === correctAnswer) {
+       alert("Correct!")
+       secondsLeft+=5
+
+     } else {
+       alert("Incorrect!")
+     }
+    }
+  }
+  }
   // endGame.addEventListener("click", saveScore);
 
   start.addEventListener("click", startQuiz);
