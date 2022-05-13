@@ -1,0 +1,31 @@
+/* .hide {
+    display: none;
+} */
+.visible {
+    visibility: visible !important;
+}
+
+.invisible {
+    visibility: hidden !important;
+}
+
+button {
+    background-color: rgb(161, 103, 215);
+    margin-left: 45%;
+    max-width:30%;
+}
+
+li {
+    padding: 15px;
+    justify-content: space-around;
+    list-style-type:none;
+    white-space: nowrap;
+    margin-left: 10%;
+    border-radius: 12%;
+}
+
+.quiz-container {
+    color:black;
+    margin-left: 10%;
+    margin-right: 10%;
+}
